@@ -17,13 +17,7 @@ class _TaskItemState extends State<TaskItem> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(widget.task.title),
-      subtitle: Column(
-        children: [
-          Text("Status: ${_status()}"),
-          if (_isDoing()) Text("Progress: ${widget.task.progress()}"),
-          _actions()
-        ],
-      ),
+      subtitle: _content(),
     );
   }
 
@@ -38,6 +32,32 @@ class _TaskItemState extends State<TaskItem> {
 
   bool _isDoing() => widget.task.status.isSameAs(Status.doing);
 
+  Widget _content() {
+    switch (widget.task.status.status) {
+      case Status.toDo:
+      case Status.done: return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(_status()),
+          _actions(),
+        ],
+      );
+      case Status.doing: return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(_status()),
+              Text("Progress: ${widget.task.progress()}"),
+            ],
+          ),
+          _actions(),
+        ],
+      );
+      default: return null;
+    }
+  }
+
   Widget _actions() {
     switch (widget.task.status.status) {
       case Status.toDo: return RaisedButton(
@@ -47,8 +67,9 @@ class _TaskItemState extends State<TaskItem> {
         }),
       );
       case Status.doing: return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FlatButton(
+          RaisedButton(
             child: Text("Cancel"),
             onPressed: () => setState(() {
               widget.task.status = TaskStatus.toDo();

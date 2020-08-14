@@ -13,7 +13,6 @@ class ScopesApp extends StatelessWidget {
         primarySwatch: Colors.amber,
       ),
       darkTheme: ThemeData(
-        primarySwatch: Colors.amber,
         colorScheme: ColorScheme.dark(secondary: Colors.amber.shade200),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
