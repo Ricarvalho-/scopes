@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
-void showAboutScopesDialog(BuildContext context) async {
+void showAboutScopesDialog({@required BuildContext context}) async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
   showAboutDialog(

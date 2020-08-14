@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
 
-import '../commons/about.dart';
 import '../commons/progress_status_item.dart';
-import '../goal/goals_page.dart';
-import 'model/scope.dart';
+import '../scope/model/scope.dart';
+import '../task/tasks_page.dart';
+import 'model/goal.dart';
 
-class ScopesPage extends StatefulWidget {
+class GoalsPage extends StatefulWidget {
+  final Scope scope;
+
+  GoalsPage({Key key, this.scope}) : super(key: key);
+
   @override
-  _ScopesPageState createState() => _ScopesPageState();
+  _GoalsPageState createState() => _GoalsPageState(scope.goals);
 }
 
-class _ScopesPageState extends State<ScopesPage> {
-  List<Scope> scopes = [];
+class _GoalsPageState extends State<GoalsPage> {
+  List<Goal> goals;
+
+  _GoalsPageState(this.goals);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Scopes"),
+        title: Text(widget.scope.title),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
@@ -29,33 +35,28 @@ class _ScopesPageState extends State<ScopesPage> {
               icon: Icon(Icons.search),
               tooltip: "Search",
             ),
-            IconButton(
-              icon: Icon(Icons.info_outline),
-              tooltip: "About",
-              onPressed: () => showAboutScopesDialog(context: context),
-            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Create scope',
+        tooltip: 'Create goal',
         child: Icon(Icons.add),
         onPressed: () => setState(() {
-          scopes.add(
-              Scope("Scope ${scopes.length + 1}", []),
+          goals.add(
+            Goal("Goal ${goals.length + 1}", DateTime.now(), []),
           );
         }),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: ListView.separated(
-        itemCount: scopes.length,
+        itemCount: goals.length,
         separatorBuilder: (context, index) => Divider(),
         itemBuilder: (context, index) => ProgressStatusItem(
-          status: scopes[index],
+          status: goals[index],
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => GoalsPage(
-                scope: scopes[index],
+              builder: (context) => TasksPage(
+                goal: goals[index],
               ),
             ));
           },
