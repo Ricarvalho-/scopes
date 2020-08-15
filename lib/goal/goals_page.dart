@@ -53,15 +53,18 @@ class _GoalsPageState extends State<GoalsPage> {
         separatorBuilder: (context, index) => Divider(),
         itemBuilder: (context, index) => ProgressStatusItem(
           status: goals[index],
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TasksPage(
-                goal: goals[index],
-              ),
-            ));
-          },
+          onTap: () => _navigateTo(goals[index]),
         ),
       ),
     );
+  }
+
+  void _navigateTo(Goal goal) async {
+    await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => TasksPage(
+        goal: goal,
+      ),
+    ));
+    setState(() {});
   }
 }

@@ -52,15 +52,18 @@ class _ScopesPageState extends State<ScopesPage> {
         separatorBuilder: (context, index) => Divider(),
         itemBuilder: (context, index) => ProgressStatusItem(
           status: scopes[index],
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => GoalsPage(
-                scope: scopes[index],
-              ),
-            ));
-          },
+          onTap: () => _navigateTo(scopes[index]),
         ),
       ),
     );
+  }
+
+  void _navigateTo(Scope scope) async {
+    await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => GoalsPage(
+        scope: scope,
+      ),
+    ));
+    setState(() {});
   }
 }
