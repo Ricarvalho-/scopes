@@ -11,6 +11,8 @@ class Goal extends ProgressStatus {
 
   DateTime highlightedDeadline() => deadline;
 
+  bool isSelfDeadline() => true;
+
   double toDoPercent() => tasks.fold(
       0, (previousValue, task) => previousValue + 1 - task.progress()
   ) / tasks.length;

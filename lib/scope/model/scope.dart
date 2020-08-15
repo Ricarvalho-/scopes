@@ -10,11 +10,14 @@ class Scope extends ProgressStatus {
   Scope(this.title, this.goals);
 
   DateTime highlightedDeadline() => (
-      goals.where((goal) => goal.tasks
-          .every((task) => !task.status.isSameAs(Status.done))
-      ).map((goal) => goal.deadline)
-          .toList()..sort()
+      goals.where(
+              (goal) => !goal.tasks.every(
+                      (task) => task.status.isSameAs(Status.done)
+              ) || goal.tasks.isEmpty
+      ).map((goal) => goal.deadline).toList()..sort()
   ).firstOrNull();
+
+  bool isSelfDeadline() => false;
 
   double toDoPercent() => _percentOf(Status.toDo);
 

@@ -30,11 +30,11 @@ void main() {
 
       test("Alone but empty should fill To Do percent", () {
         final goal = _dummyGoal([
-          TaskStatus.doing(0.5),
+          TaskStatus.doing(0),
         ]);
 
-        expect(goal.toDoPercent(), 0.5);
-        expect(goal.doingPercent(), 0.5);
+        expect(goal.toDoPercent(), 1);
+        expect(goal.doingPercent(), 0);
         expect(goal.donePercent(), 0);
       });
 
