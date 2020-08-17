@@ -5,9 +5,11 @@ extension SafeAccess<E> on Iterable<E> {
 }
 
 extension Conditional<E> on Iterable<E> {
-  Iterable<E> followedByIf(bool condition, Iterable<E> other) {
-    if (condition) return this.followedBy(other);
-    return this;
+  Iterable<E> followedByIf(bool condition, Iterable<E> Function() other,
+  {Iterable<E> Function() elseOther}) {
+    if (condition) return this.followedBy(other());
+    else if (elseOther != null) return this.followedBy(elseOther());
+    else return this;
   }
 }
 

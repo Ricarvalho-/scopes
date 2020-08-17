@@ -20,32 +20,47 @@ class ProgressStatusItem extends StatelessWidget {
     return ListTile(
       title: Text(status.title),
       subtitle: Column(
-        children: <Widget>[].followedByIf(
-          status.isSelfDeadline && status.highlightedDeadline != null,
-          [
-            Text("Deadline: ${status.highlightedDeadline}"),
-          ],
-        ).followedByIf(status.containsTasks, [
-          ProgressBar(
-            sections: [
-              ProgressSection(
-                "Done",
-                status.donePercent,
-                Colors.green,
-              ),
-              ProgressSection(
-                "Doing",
-                status.doingPercent,
-                Colors.yellow,
-              ),
-              ProgressSection(
-                "To Do",
-                status.toDoPercent,
-                Colors.red,
-              ),
-            ],
-          ),
-        ]).toList(),
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[]
+            .followedByIf(
+              status.isSelfDeadline && status.highlightedDeadline != null,
+              () => [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:
+                      Text("${status.highlightedDeadline.prettyFormatted()}"),
+                ),
+              ],
+              elseOther: () => [
+                SizedBox(
+                  height: status.containsTasks ? 8 : 0,
+                )
+              ],
+            )
+            .followedByIf(
+                status.containsTasks,
+                () => [
+                      ProgressBar(
+                        sections: [
+                          ProgressSection(
+                            "Done",
+                            status.donePercent,
+                            Colors.green,
+                          ),
+                          ProgressSection(
+                            "Doing",
+                            status.doingPercent,
+                            Colors.yellow,
+                          ),
+                          ProgressSection(
+                            "To Do",
+                            status.toDoPercent,
+                            Colors.red,
+                          ),
+                        ],
+                      ),
+                    ])
+            .toList(),
       ),
       onTap: onTap,
     );
