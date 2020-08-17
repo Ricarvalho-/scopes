@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:scopes/task/model/task_status.dart';
 
+import '../commons/extensions.dart';
+import 'model/task_status.dart';
 import 'model/task.dart';
 
 class TaskItem extends StatefulWidget {
@@ -23,73 +24,93 @@ class _TaskItemState extends State<TaskItem> {
 
   String _status() {
     switch (widget.task.status.status) {
-      case Status.toDo: return "To Do";
-      case Status.doing: return "Doing";
-      case Status.done: return "Done";
-      default: return "";
+      case Status.toDo:
+        return "To Do";
+      case Status.doing:
+        return "Doing";
+      case Status.done:
+        return "Done";
+      default:
+        return "";
     }
   }
-
-  bool _isDoing() => widget.task.status.isSameAs(Status.doing);
 
   Widget _content() {
     switch (widget.task.status.status) {
       case Status.toDo:
-      case Status.done: return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(_status()),
-          _actions(),
-        ],
-      );
-      case Status.doing: return Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(_status()),
-              Text("Progress: ${widget.task.progress()}"),
-            ],
-          ),
-          _actions(),
-        ],
-      );
-      default: return null;
+      case Status.done:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(_status()),
+            _actions(),
+          ],
+        );
+      case Status.doing:
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_status()),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Slider.adaptive(
+                      value: widget.task.progress,
+                      onChanged: (value) => setState(() {
+                        widget.task.status = TaskStatus.doing(value);
+                      }),
+                    ),
+                  ),
+                ),
+                Text(widget.task.progress.toStringAsPercent()),
+              ],
+            ),
+            _actions(),
+          ],
+        );
+      default:
+        return null;
     }
   }
 
   Widget _actions() {
     switch (widget.task.status.status) {
-      case Status.toDo: return RaisedButton(
-        child: Text("Begin"),
-        onPressed: () => setState(() {
-          widget.task.status = TaskStatus.doing(0);
-        }),
-      );
-      case Status.doing: return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          RaisedButton(
-            child: Text("Cancel"),
-            onPressed: () => setState(() {
-              widget.task.status = TaskStatus.toDo();
-            }),
-          ),
-          RaisedButton(
-            child: Text("Finish"),
-            onPressed: () => setState(() {
-              widget.task.status = TaskStatus.done();
-            }),
-          ),
-        ],
-      );
-      case Status.done: return RaisedButton(
-        child: Text("Restart"),
-        onPressed: () => setState(() {
-          widget.task.status = TaskStatus.toDo();
-        }),
-      );
-      default: return null;
+      case Status.toDo:
+        return RaisedButton(
+          child: Text("BEGIN"),
+          onPressed: () => setState(() {
+            widget.task.status = TaskStatus.doing(0);
+          }),
+        );
+      case Status.doing:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            RaisedButton(
+              child: Text("CANCEL"),
+              onPressed: () => setState(() {
+                widget.task.status = TaskStatus.toDo();
+              }),
+            ),
+            RaisedButton(
+              child: Text("FINISH"),
+              onPressed: () => setState(() {
+                widget.task.status = TaskStatus.done();
+              }),
+            ),
+          ],
+        );
+      case Status.done:
+        return RaisedButton(
+          child: Text("RESTART"),
+          onPressed: () => setState(() {
+            widget.task.status = TaskStatus.toDo();
+          }),
+        );
+      default:
+        return null;
     }
   }
 }

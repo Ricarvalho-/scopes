@@ -1,8 +1,9 @@
 abstract class ProgressStatus {
-  String title;
-  DateTime highlightedDeadline();
-  bool isSelfDeadline();
-  double toDoPercent();
-  double doingPercent();
-  double donePercent();
+  String get title;
+  DateTime get highlightedDeadline;
+  bool get isSelfDeadline;
+  bool get containsTasks;
+  double get toDoPercent;
+  double get doingPercent;
+  double get donePercent;
 }

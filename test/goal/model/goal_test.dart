@@ -11,9 +11,9 @@ void main() {
           TaskStatus.toDo(),
         ]);
 
-        expect(goal.toDoPercent(), 1);
-        expect(goal.doingPercent(), 0);
-        expect(goal.donePercent(), 0);
+        expect(goal.toDoPercent, 1);
+        expect(goal.doingPercent, 0);
+        expect(goal.donePercent, 0);
       });
     });
 
@@ -23,9 +23,9 @@ void main() {
           TaskStatus.doing(1),
         ]);
 
-        expect(goal.toDoPercent(), 0);
-        expect(goal.doingPercent(), 1);
-        expect(goal.donePercent(), 0);
+        expect(goal.toDoPercent, 0);
+        expect(goal.doingPercent, 1);
+        expect(goal.donePercent, 0);
       });
 
       test("Alone but empty should fill To Do percent", () {
@@ -33,9 +33,9 @@ void main() {
           TaskStatus.doing(0),
         ]);
 
-        expect(goal.toDoPercent(), 1);
-        expect(goal.doingPercent(), 0);
-        expect(goal.donePercent(), 0);
+        expect(goal.toDoPercent, 1);
+        expect(goal.doingPercent, 0);
+        expect(goal.donePercent, 0);
       });
 
       test("Alone but incomplete should share percent with To Do", () {
@@ -43,9 +43,9 @@ void main() {
           TaskStatus.doing(0.7),
         ]);
 
-        expect(goal.toDoPercent(), closeTo(0.3, 0.001));
-        expect(goal.doingPercent(), closeTo(0.7, 0.001));
-        expect(goal.donePercent(), 0);
+        expect(goal.toDoPercent, closeTo(0.3, 0.001));
+        expect(goal.doingPercent, closeTo(0.7, 0.001));
+        expect(goal.donePercent, 0);
       });
     });
 
@@ -55,9 +55,9 @@ void main() {
           TaskStatus.done(),
         ]);
 
-        expect(goal.toDoPercent(), 0);
-        expect(goal.doingPercent(), 0);
-        expect(goal.donePercent(), 1);
+        expect(goal.toDoPercent, 0);
+        expect(goal.doingPercent, 0);
+        expect(goal.donePercent, 1);
       });
     });
 
@@ -70,16 +70,16 @@ void main() {
           TaskStatus.done(),
         ]);
 
-        expect(goal.toDoPercent(), closeTo(0.575, 0.001));
-        expect(goal.doingPercent(), closeTo(0.175, 0.001));
-        expect(goal.donePercent(), closeTo(0.25, 0.001));
+        expect(goal.toDoPercent, closeTo(0.575, 0.001));
+        expect(goal.doingPercent, closeTo(0.175, 0.001));
+        expect(goal.donePercent, closeTo(0.25, 0.001));
       });
     });
   });
 }
 
-Goal _dummyGoal(List<TaskStatus> status) => Goal(
+Goal _dummyGoal(List<TaskStatus> statuses) => Goal(
       null,
       null,
-      status.map((it) => Task(null, it)).toList(),
+      statuses.map((it) => Task(null, it)).toList(),
     );

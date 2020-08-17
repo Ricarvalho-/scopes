@@ -29,7 +29,7 @@ class _TasksPageState extends State<TasksPage> {
         shape: CircularNotchedRectangle(),
         notchMargin: 8,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             IconButton(
               icon: Icon(Icons.search),
@@ -41,13 +41,10 @@ class _TasksPageState extends State<TasksPage> {
       floatingActionButton: FloatingActionButton(
         tooltip: 'Create task',
         child: Icon(Icons.add),
-        onPressed: () => setState(() {
-          tasks.add(
-            Task("Task ${tasks.length + 1}", TaskStatus.toDo()),
-          );
-        }),
+        onPressed: _askForTitle,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      extendBody: true,
       body: ListView.separated(
         itemCount: tasks.length,
         separatorBuilder: (context, index) => Divider(),
@@ -56,5 +53,38 @@ class _TasksPageState extends State<TasksPage> {
         ),
       ),
     );
+  }
+
+  void _askForTitle() async {
+    final title = await showDialog(
+        context: context,
+        builder: (context) {
+          final controller = TextEditingController();
+          return AlertDialog(
+            title: Text("New task"),
+            content: TextField(
+              controller: controller,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                labelText: "Title",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            actions: [
+              FlatButton(
+                child: Text("CANCEL"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.of(context).pop(controller.value.text),
+              ),
+            ],
+          );
+        });
+    if (title == null || title.toString().trim().isEmpty) return;
+    setState(() => tasks.add(
+      Task(title, TaskStatus.toDo()),
+    ));
   }
 }

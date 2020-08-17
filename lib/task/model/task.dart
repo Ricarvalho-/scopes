@@ -6,5 +6,5 @@ class Task {
 
   Task(this.title, this.status);
 
-  double progress() => status.progress;
+  double get progress => status.progress;
 }
